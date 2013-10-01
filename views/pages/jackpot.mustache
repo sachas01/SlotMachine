@@ -1,0 +1,33 @@
+{{>head}}
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-12">
+      <h1>{{type}} Jackpot</h1>
+    </div>
+    {{#jackpot}}
+    <div class="col-lg-12 col-sm-12 col-12">
+      <h3>Jackpot <strong>{{balance}} BTC</strong></h3>
+      <p>To be entered into the {{type}} Jackpot, you have to play a round of slots.  To play slots, ensure that you have funds in your account.<p>
+    </div>
+    {{/jackpot}}
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col-lg-12 col-sm-12 col-12">
+      <h1>Winners</h1>
+    </div>
+    {{#winners}}
+    <div class="col-lg-12 col-sm-12 col-12">
+      <p><strong>{{winner}}</strong> - {{balance}} - <a href="http://blockchain.info/tx/{{txid}}" target="_blank">Verify</a></p>
+    </div>
+    {{/winners}}
+    {{^winners}}
+    <div class="col-lg-12 col-sm-12 col-12">
+      <p><strong>None yet. Be the first one!</strong></p>
+    </div>
+    {{/winners}}
+  </div>
+
+{{>foot}}

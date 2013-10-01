@@ -1,0 +1,79 @@
+{{>head}}
+
+	<div class="row">
+		<div class="game">
+			<div class="text-center">
+				<h1>Slots on {{name}}</h1>
+			</div>
+			<div class="row gameRow">
+				<div class="col-lg-4 col-sm-4 col-4">
+					<div class="gameData"><span class="balance">{{balance}}</span> BTC</div>
+					Credits
+				</div>
+				<div class="col-lg-4 col-sm-4 col-4">
+					<div class="gameData">.001 BTC</div>
+					Bet Amount
+				</div>
+				<div class="col-lg-4 col-sm-4 col-4">
+					<div class="gameData">0 BTC</div>
+					Winner Paid
+				</div>
+			</div>
+			<div class="text-center">
+				<ul class="slot">
+					<li><div class="slot-icon slot-icon-bell"></div></li>
+					<li><div class="slot-icon slot-icon-cherry"></div></li>
+					<li><div class="slot-icon slot-icon-drink"></div></li>
+					<li><div class="slot-icon slot-icon-lemon"></div></li>
+					<li><div class="slot-icon slot-icon-gloves"></div></li>
+					<li><div class="slot-icon slot-icon-melon"></div></li>
+					<li><div class="slot-icon slot-icon-seven"></div></li>
+				</ul>
+			</div>
+			<div class="text-center">
+				<input type="button" id="play" value="Spin!" class="btn btn-default btn-large btn-spin">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-offset-4 col-lg-4 col-sm-4 col-12 text-center"><h2 class="results"></h2></div>
+		<div class="col-lg-4 col-sm-4 col-12 text-center"><h2>&nbsp;</h2></div>
+	</div>
+
+
+<script src="/assets/js/jquery.slots.js"></script>
+<script src="/assets/js/jquery.easing.js"></script>
+<script>
+var checkForWin = function(numbers){
+	var win = true;
+	$.each(numbers, function(key, number){
+		if(number!=7)
+			win = false;
+	});
+	$(".results").fadeIn();
+	if(win)
+		$(".results").html("You won!");
+	else{
+		$(".results").html("You lost, try again!");
+		var balance = parseFloat($(".balance").html());
+		balance = balance - .001;
+		$(".balance").html(balance);
+	}
+}
+
+var clearResults = function(){
+	$(".results").fadeOut();
+}
+
+$('.slot').jSlots({
+	number : 3,
+	winnerNumber : 7,
+	spinner : '#play',
+	easing : 'easeOutSine',
+	onEnd : checkForWin,
+	onStart : clearResults,
+	loops : 6
+});
+</script>
+
+{{>foot}}
