@@ -57,6 +57,7 @@
             $.post('/api/roll',{uuid:uuid},function(data){
                 if(data.status=="success"){
                     base.numbers = data.numbers;
+                    jackpot = data.jackpot;
                 }else{
                     alert("Oops, something went wrong. You will not be charged for this roll");
                     base.numbers = new Array(1,1,1);

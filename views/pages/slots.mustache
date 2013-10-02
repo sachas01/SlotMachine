@@ -15,54 +15,93 @@
 					Bet Amount
 				</div>
 				<div class="col-lg-4 col-sm-4 col-4">
-					<div class="gameData">0 BTC</div>
+					<div class="gameData"><span class="jackpot">{{slotsJackpot}}</span> BTC</div>
 					Winner Paid
 				</div>
 			</div>
 			<div class="text-center">
+				<h2 class="results"></h2>
+			</div>
+			<div class="text-center">
 				<ul class="slot">
 					<li><div class="slot-icon slot-icon-bell"></div></li>
-					<li><div class="slot-icon slot-icon-cherry"></div></li>
 					<li><div class="slot-icon slot-icon-drink"></div></li>
 					<li><div class="slot-icon slot-icon-lemon"></div></li>
 					<li><div class="slot-icon slot-icon-gloves"></div></li>
 					<li><div class="slot-icon slot-icon-melon"></div></li>
-					<li><div class="slot-icon slot-icon-seven"></div></li>
+					<li><div class="slot-icon slot-icon-ring"></div></li>
+					<li><div class="slot-icon slot-icon-bitcoin"></div></li>
+					<li><div class="slot-icon slot-icon-woman"></div></li>
+					<li><div class="slot-icon slot-icon-watch"></div></li>
+					<li><div class="slot-icon slot-icon-cherry"></div></li>
 				</ul>
 			</div>
 			<div class="text-center">
 				<input type="button" id="play" value="Spin!" class="btn btn-default btn-large btn-spin">
 			</div>
+			<div class="text-center">
+				<div class="odds">
+					<p>1 Cherry = 1 x (.001 BTC)</p>
+					<p>1 Bitcoin = 2 x (.001 BTC)</p>
+					<p>2 Cherries = 5 x (.001 BTC)</p>
+					<p>2 Bitcoin = 10 x (.001 BTC)</p>
+					<p>3 Cherries = 10 x (.001 BTC)</p>
+					<p>3 Bitcoin = Jackpot</p>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-offset-4 col-lg-4 col-sm-4 col-12 text-center"><h2 class="results"></h2></div>
-		<div class="col-lg-4 col-sm-4 col-12 text-center"><h2>&nbsp;</h2></div>
 	</div>
 
 
 <script src="/assets/js/jquery.slots.js"></script>
 <script src="/assets/js/jquery.easing.js"></script>
 <script>
-var checkForWin = function(numbers){
-	var win = true;
-	$.each(numbers, function(key, number){
-		if(number!=7)
-			win = false;
-	});
-	$(".results").fadeIn();
-	if(win)
-		$(".results").html("You won!");
-	else{
-		$(".results").html("You lost, try again!");
-		var balance = parseFloat($(".balance").html());
-		balance = balance - .001;
+
+var balance = parseFloat($(".balance").html());
+var jackpot = parseFloat($(".jackpot").html());
+
+var won = function (ammount){
+	//if(balance > .001){
+		balance = balance + ammount;
+		balance = Number(balance.toFixed(3));
 		$(".balance").html(balance);
+		$(".results").html("You won!");
+	//}else{
+	//	$(".results").html("You won, but you didn't bet anything");
+	//}
+	$(".results").fadeIn();
+}
+
+var lost = function(){
+	$(".results").html("You lost, try again!");
+	$(".results").fadeIn();
+}
+
+
+var checkForWin = function(numbers){
+	$(".jackpot").html(jackpot);
+	if(numbers[0]==7 && numbers[1]==7 && numbers[2]==7){
+		won(jackpot);
+	}else if(numbers[0]==10 && numbers[1]==10 && numbers[2]==10){
+		won(.01);
+	}else if((numbers[0]==7 && numbers[1]==7) || (numbers[1]==7 && numbers[2]==7) || (numbers[0]==7 && numbers[2]==7)){
+		won(.01);
+	}else if((numbers[0]==10 && numbers[1]==10) || (numbers[1]==10 && numbers[2]==10) || (numbers[0]==10 && numbers[2]==10)){
+		won(.005);
+	}else if(numbers[0]==7 || numbers[1]==7 || numbers[2]==7){
+		won(.002);
+	}else if(numbers[0]==10 || numbers[1]==10 || numbers[2]==10){
+		won(.001);
+	}else{
+		lost();
 	}
 }
 
 var clearResults = function(){
 	$(".results").fadeOut();
+	balance = balance - .001;
+	balance = Number(balance.toFixed(3));
+	$(".balance").html(balance);
 }
 
 $('.slot').jSlots({
