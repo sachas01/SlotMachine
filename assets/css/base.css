@@ -99,8 +99,8 @@ footer {
 	.slot-icon-woman {
 		background-position: -325px -479px;
 	}
-	.slot-icon-seven {
-		background-position: -535px -125px;
+	.slot-icon-bitcoin {
+		background-position: -532px -125px;
 	}
 	.slot-icon-lemon {
 		background-position: -542px -301px;
@@ -139,6 +139,14 @@ footer {
 	border-radius: 10px;
 	color: white;
 	line-height: 29px;
+}
+
+.odds {
+	text-align: left;
+	border: 2px solid white;
+	padding: 10px;
+	border-radius: 15px;
+	margin-bottom: 15px;
 }
 
 .btn-spin {

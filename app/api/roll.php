@@ -20,11 +20,11 @@ if(!is_object($user)){
 
 $roll = R::dispense("roll");
 $roll->uuid = $uuid;
-$roll->first = rand(1,7);
-$roll->second = rand(1,7);
-$roll->third = rand(1,7);
-$roll->fourth = rand(1,7);
-$roll->fifth = rand(1,7);
+$roll->first = rand(1,10);
+$roll->second = rand(1,10);
+$roll->third = rand(1,10);
+$roll->fourth = rand(1,10);
+$roll->fifth = rand(1,10);
 $roll->time = time();
 $roll->key = $key;
 R::store($roll);
@@ -41,6 +41,7 @@ $data = array(
 		)
 	);
 
+$jackpotSlots = $bitcoin->getbalance("slots")*.9;
 
 if($user->balance > .001){
 	$bitcoin->walletpassphrase($settings["secondPassword"],60);
@@ -49,11 +50,33 @@ if($user->balance > .001){
 	$bitcoin->move($key,$settings["jackpotMonth"],.0002);
 	$bitcoin->move($key,$settings["jackpotWeek"],.0002);
 	$jackpotSlots = $bitcoin->getbalance("slots")*.9;
+
 	if($roll->first==7 && $roll->second==7 && $roll->third==7){
 		$bitcoin->move("slots",$key,$jackpotSlots);
 		$data["won"] = true;
 		$data["ammount"] = $jackpotSlots;
+	}elseif($roll->first==10 && $roll->second==10 && $roll->third==10){
+		$bitcoin->move("slots",$key,.01);
+		$data["won"] = true;
+		$data["ammount"] = .01;
+	}elseif(($roll->first==7 && $roll->second==7) || ($roll->second==7 && $roll->third==7) || ($roll->first==7 && $roll->third==7)){
+		$bitcoin->move("slots",$key,.01);
+		$data["won"] = true;
+		$data["ammount"] = .01;
+	}elseif(($roll->first==10 && $roll->second==10) || ($roll->second==10 && $roll->third==10) || ($roll->first==10 && $roll->third==10)){
+		$bitcoin->move("slots",$key,.005);
+		$data["won"] = true;
+		$data["ammount"] = .005;
+	}elseif($roll->first==7 || $roll->second==7 || $roll->third==7){
+		$bitcoin->move("slots",$key,.002);
+		$data["won"] = true;
+		$data["ammount"] = .002;
+	}elseif($roll->first==10 || $roll->second==10 || $roll->third==10){
+		$bitcoin->move("slots",$key,.001);
+		$data["won"] = true;
+		$data["ammount"] = .001;
 	}
+
 	$data["jackpot"] = $jackpotSlots;
 	$entry = R::dispense('entry');
 	$entry->type = "weekly";
@@ -69,6 +92,7 @@ if($user->balance > .001){
 	R::store($entry);
 }
 
+$data["jackpot"] = $jackpotSlots;
 
 echo json_encode($data);
 
