@@ -160,6 +160,10 @@
             lowerSpeed : function() {
 
                 this.spinSpeed += base.increment;
+                if(this.$el.attr('id') == 1)
+                    this.spinSpeed = this.spinSpeed * .8;
+                else if(this.$el.attr('id') == 2)
+                    this.spinSpeed = this.spinSpeed * .6;
                 this.loopCount++;
 
                 if ( this.loopCount < base.options.loops ) {

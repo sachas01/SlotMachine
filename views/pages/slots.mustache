@@ -2,9 +2,6 @@
 
 	<div class="row">
 		<div class="game">
-			<div class="text-center">
-				<h1>Slots on {{name}}</h1>
-			</div>
 			<div class="row gameRow">
 				<div class="col-lg-4 col-sm-4 col-4">
 					<div class="gameData"><span class="balance">{{balance}}</span> BTC</div>
@@ -20,8 +17,48 @@
 				</div>
 			</div>
 			<div class="text-center">
-				<h2 class="results"></h2>
+				<div class="odds">
+					<p class="sm-margin">Jackpot
+						<span class="pull-right">
+							<img src="/assets/img/icon-bitcoin.jpg" class="payout-icon">
+							<img src="/assets/img/icon-bitcoin.jpg" class="payout-icon">
+							<img src="/assets/img/icon-bitcoin.jpg" class="payout-icon">
+						</span>
+					</p>
+					<p class="sm-margin">10 x .001 BTC
+						<span class="pull-right">
+							<img src="/assets/img/icon-cherry.jpg" class="payout-icon">
+							<img src="/assets/img/icon-cherry.jpg" class="payout-icon">
+							<img src="/assets/img/icon-cherry.jpg" class="payout-icon">
+						</span>
+					</p>
+					<p class="sm-margin">10 x .001 BTC
+						<span class="pull-right">
+							<img src="/assets/img/icon-bitcoin.jpg" class="payout-icon">
+							<img src="/assets/img/icon-bitcoin.jpg" class="payout-icon">
+						</span>
+					</p>
+					<p class="sm-margin">5 x .001 BTC
+						<span class="pull-right">
+							<img src="/assets/img/icon-cherry.jpg" class="payout-icon">
+							<img src="/assets/img/icon-cherry.jpg" class="payout-icon">
+						</span>
+					</p>
+					<p class="sm-margin">2 x .001 BTC
+						<span class="pull-right">
+							<img src="/assets/img/icon-bitcoin.jpg" class="payout-icon">
+						</span>
+					</p>
+					<p class="sm-margin">1 x .001 BTC
+						<span class="pull-right">
+							<img src="/assets/img/icon-cherry.jpg" class="payout-icon">
+						</span>
+					</p>
+				</div>
 			</div>
+			<!-- <div class="text-center" style="height: 45px">
+				<h2 class="results"></h2>
+			</div> -->
 			<div class="text-center">
 				<ul class="slot">
 					<li><div class="slot-icon slot-icon-bell"></div></li>
@@ -40,14 +77,7 @@
 				<input type="button" id="play" value="Spin!" class="btn btn-default btn-large btn-spin">
 			</div>
 			<div class="text-center">
-				<div class="odds">
-					<p>1 Cherry = 1 x .001 BTC (First Slot)</p>
-					<p>1 Bitcoin = 2 x .001 BTC (First Slot)</p>
-					<p>2 Cherries = 5 x .001 BTC (First and Second Slot)</p>
-					<p>2 Bitcoin = 10 x .001 BTC (First and Second Slot)</p>
-					<p>3 Cherries = 10 x .001 BTC</p>
-					<p>3 Bitcoin = Jackpot</p>
-				</div>
+				<input type="checkbox" class="mute"> Mute
 			</div>
 		</div>
 	</div>
@@ -61,14 +91,26 @@ var balance = parseFloat($(".balance").html());
 var jackpot = parseFloat($(".jackpot").html());
 var paid = false;
 
+var playSound = function(sound){
+	if(!$(".mute").is(":checked")){
+		if(sound=="win")
+			var audio = new Audio("/assets/sounds/cash-register-01.wav");
+		else if(sound=="spin")
+			var audio = new Audio("/assets/sounds/spin-slots.mp3");
+		audio.play();
+	}
+}
+
 var won = function (ammount){
 	if(paid){
 		balance = balance + ammount;
 		balance = Number(balance.toFixed(3));
 		$(".balance").html(balance);
 		$(".results").html("You won!");
+		playSound("win");
 	}else{
-		$(".results").html("You won, but you didn't bet anything");
+		$(".results").html("You won!");
+		playSound("win");
 	}
 	$(".results").fadeIn();
 }
@@ -78,20 +120,19 @@ var lost = function(){
 	$(".results").fadeIn();
 }
 
-
 var checkForWin = function(numbers){
 	$(".jackpot").html(jackpot);
-	if(numbers[0]==7 && numbers[1]==7 && numbers[2]==7){
+	if(numbers[2]==7 && numbers[1]==7 && numbers[0]==7){
 		won(jackpot);
-	}else if(numbers[0]==10 && numbers[1]==10 && numbers[2]==10){
+	}else if(numbers[2]==10 && numbers[1]==10 && numbers[0]==10){
 		won(.01);
-	}else if(numbers[0]==7 && numbers[1]==7){
+	}else if(numbers[2]==7 && numbers[1]==7){
 		won(.01);
-	}else if(numbers[0]==10 && numbers[1]==10){
+	}else if(numbers[2]==10 && numbers[1]==10){
 		won(.005);
-	}else if(numbers[0]==7){
+	}else if(numbers[2]==7){
 		won(.002);
-	}else if(numbers[0]==10){
+	}else if(numbers[2]==10){
 		won(.001);
 	}else{
 		lost();
@@ -100,6 +141,7 @@ var checkForWin = function(numbers){
 
 var clearResults = function(){
 	$(".results").fadeOut();
+	playSound("spin");
 	if(balance > .001){
 		balance = balance - .001;
 		balance = Number(balance.toFixed(3));
@@ -117,6 +159,14 @@ $('.slot').jSlots({
 	onEnd : checkForWin,
 	onStart : clearResults,
 	loops : 6
+});
+
+$(function(){
+	$(".slot").each(function(key, slot){
+		var random = Math.floor((Math.random()*10));
+		var top = random * -140;
+		$(slot).css("top",top);
+	});
 });
 </script>
 

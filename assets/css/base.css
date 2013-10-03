@@ -76,7 +76,7 @@ footer {
 
 
 .slot-icon {
-	background: url('/assets/img/icons-sprite.png') no-repeat;
+	background: url('/assets/img/icons-sprite.jpg') no-repeat;
 	height: 140px;
 	width: 130px;
 	position: relative;
@@ -154,4 +154,13 @@ footer {
 	border: 1px solid;
 	padding: 10px 40px;
 	margin: 10px;
+}
+
+.sm-margin {
+	margin: 5px 0;
+}
+
+.payout-icon{
+	height: 25px;
+	width: 25px;
 }

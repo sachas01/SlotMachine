@@ -51,27 +51,27 @@ if($user->balance > .001){
 	$bitcoin->move($key,$settings["jackpotWeek"],.0002);
 	$jackpotSlots = $bitcoin->getbalance("slots")*.9;
 
-	if($roll->first==7 && $roll->second==7 && $roll->third==7){
+	if($roll->third==7 && $roll->second==7 && $roll->first==7){
 		$bitcoin->move("slots",$key,$jackpotSlots);
 		$data["won"] = true;
 		$data["ammount"] = $jackpotSlots;
-	}elseif($roll->first==10 && $roll->second==10 && $roll->third==10){
+	}elseif($roll->third==10 && $roll->second==10 && $roll->first==10){
 		$bitcoin->move("slots",$key,.01);
 		$data["won"] = true;
 		$data["ammount"] = .01;
-	}elseif($roll->first==7 && $roll->second==7){
+	}elseif($roll->third==7 && $roll->second==7){
 		$bitcoin->move("slots",$key,.01);
 		$data["won"] = true;
 		$data["ammount"] = .01;
-	}elseif($roll->first==10 && $roll->second==10){
+	}elseif($roll->third==10 && $roll->second==10){
 		$bitcoin->move("slots",$key,.005);
 		$data["won"] = true;
 		$data["ammount"] = .005;
-	}elseif($roll->first==7){
+	}elseif($roll->third==7){
 		$bitcoin->move("slots",$key,.002);
 		$data["won"] = true;
 		$data["ammount"] = .002;
-	}elseif($roll->first==10){
+	}elseif($roll->third==10){
 		$bitcoin->move("slots",$key,.001);
 		$data["won"] = true;
 		$data["ammount"] = .001;
