@@ -29,7 +29,7 @@ $m = new Mustache_Engine(
 );
 
 $bitcoin = new jsonRPCClient('https://'.$settings["identifier"].':'.$settings["password"].'@blockchain.info:443');
-
+$bitcoin->walletpassphrase($settings["secondPassword"],60);
 
 require_once(BASE."/functions.php");
 require_once(BASE."/jackpot.php");

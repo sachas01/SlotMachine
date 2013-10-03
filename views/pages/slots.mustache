@@ -41,11 +41,11 @@
 			</div>
 			<div class="text-center">
 				<div class="odds">
-					<p>1 Cherry = 1 x (.001 BTC)</p>
-					<p>1 Bitcoin = 2 x (.001 BTC)</p>
-					<p>2 Cherries = 5 x (.001 BTC)</p>
-					<p>2 Bitcoin = 10 x (.001 BTC)</p>
-					<p>3 Cherries = 10 x (.001 BTC)</p>
+					<p>1 Cherry = 1 x .001 BTC (First Slot)</p>
+					<p>1 Bitcoin = 2 x .001 BTC (First Slot)</p>
+					<p>2 Cherries = 5 x .001 BTC (First and Second Slot)</p>
+					<p>2 Bitcoin = 10 x .001 BTC (First and Second Slot)</p>
+					<p>3 Cherries = 10 x .001 BTC</p>
 					<p>3 Bitcoin = Jackpot</p>
 				</div>
 			</div>
@@ -59,16 +59,17 @@
 
 var balance = parseFloat($(".balance").html());
 var jackpot = parseFloat($(".jackpot").html());
+var paid = false;
 
 var won = function (ammount){
-	//if(balance > .001){
+	if(paid){
 		balance = balance + ammount;
 		balance = Number(balance.toFixed(3));
 		$(".balance").html(balance);
 		$(".results").html("You won!");
-	//}else{
-	//	$(".results").html("You won, but you didn't bet anything");
-	//}
+	}else{
+		$(".results").html("You won, but you didn't bet anything");
+	}
 	$(".results").fadeIn();
 }
 
@@ -84,13 +85,13 @@ var checkForWin = function(numbers){
 		won(jackpot);
 	}else if(numbers[0]==10 && numbers[1]==10 && numbers[2]==10){
 		won(.01);
-	}else if((numbers[0]==7 && numbers[1]==7) || (numbers[1]==7 && numbers[2]==7) || (numbers[0]==7 && numbers[2]==7)){
+	}else if(numbers[0]==7 && numbers[1]==7){
 		won(.01);
-	}else if((numbers[0]==10 && numbers[1]==10) || (numbers[1]==10 && numbers[2]==10) || (numbers[0]==10 && numbers[2]==10)){
+	}else if(numbers[0]==10 && numbers[1]==10){
 		won(.005);
-	}else if(numbers[0]==7 || numbers[1]==7 || numbers[2]==7){
+	}else if(numbers[0]==7){
 		won(.002);
-	}else if(numbers[0]==10 || numbers[1]==10 || numbers[2]==10){
+	}else if(numbers[0]==10){
 		won(.001);
 	}else{
 		lost();
@@ -99,9 +100,13 @@ var checkForWin = function(numbers){
 
 var clearResults = function(){
 	$(".results").fadeOut();
-	balance = balance - .001;
-	balance = Number(balance.toFixed(3));
-	$(".balance").html(balance);
+	if(balance > .001){
+		balance = balance - .001;
+		balance = Number(balance.toFixed(3));
+		paid = true;
+		$(".balance").html(balance);
+	}else
+		paid = false;
 }
 
 $('.slot').jSlots({

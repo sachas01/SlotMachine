@@ -2,15 +2,21 @@
 
 $content = array(
 	"title" => $settings["name"],
-	"profile" => true
+	"profile" => true,
+	"genAddress"=>true
 );
 
 $user = R::findOne('user', 'key = ?', array($key));
 
 if(is_object($user)){
+	if($user->address!="")
+		$content["genAddress"]=false;
+
 	if($user->updated + 60*15 < time()){
-		$user->address = $bitcoin->getaccountaddress($key);
-		$user->balance = $bitcoin->getbalance($key);
+		if($user->address!=""){
+			$user->address = $bitcoin->getaccountaddress($key);
+			$user->balance = $bitcoin->getbalance($key);		
+		}
 		$user->updated = time();
 		R::store($user);
 	}
